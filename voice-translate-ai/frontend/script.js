@@ -5,7 +5,7 @@
  */
 
 const API_BASE = "http://127.0.0.1:8000";
-const WS_URL   = "ws://127.0.0.1:8000/ws/translate";
+const WS_URL = "wss://voice-translator--2_1.railway.app/ws/translate";
 
 let srcLang = "english";
 let tgtLang = "telugu";

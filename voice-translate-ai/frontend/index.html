@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VoiceTranslate AI — Bidirectional</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-icon">🌐</span>
+      <div>
+        <span class="brand-name">VoiceTranslate AI</span>
+        <span class="brand-sub">Bidirectional Neural Translation · Final Year AI Project</span>
+      </div>
+    </div>
+    <div class="status-pill" id="statusPill">
+      <span class="dot loading" id="statusDot"></span>
+      <span id="statusText">Connecting…</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Language Selector ──────────────────────────────────────── -->
+  <section class="card lang-select-card">
+    <div class="lang-selector-row">
+
+      <!-- Source Language -->
+      <div class="lang-col">
+        <label class="lang-col-label">🎤 Speak / Type In</label>
+        <div class="lang-pill-group" id="srcLangGroup">
+          <button class="lang-pill active" data-lang="english">🇬🇧 English</button>
+          <button class="lang-pill" data-lang="hindi">🇮🇳 Hindi</button>
+          <button class="lang-pill" data-lang="telugu">🇮🇳 Telugu</button>
+          <button class="lang-pill" data-lang="tamil">🇮🇳 Tamil</button>
+          <button class="lang-pill" data-lang="malayalam">🇮🇳 Malayalam</button>
+        </div>
+      </div>
+
+      <!-- Swap button -->
+      <button class="swap-btn" id="swapBtn" title="Swap languages">⇄</button>
+
+      <!-- Target Language -->
+      <div class="lang-col">
+        <label class="lang-col-label">📖 Translate To</label>
+        <div class="lang-pill-group" id="tgtLangGroup">
+          <button class="lang-pill" data-lang="english">🇬🇧 English</button>
+          <button class="lang-pill" data-lang="hindi">🇮🇳 Hindi</button>
+          <button class="lang-pill active" data-lang="telugu">🇮🇳 Telugu</button>
+          <button class="lang-pill" data-lang="tamil">🇮🇳 Tamil</button>
+          <button class="lang-pill" data-lang="malayalam">🇮🇳 Malayalam</button>
+          <button class="lang-pill" data-lang="german">🇩🇪 German</button>
+          <button class="lang-pill" data-lang="french">🇫🇷 French</button>
+          <button class="lang-pill" data-lang="spanish">🇪🇸 Spanish</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Input ──────────────────────────────────────────────────── -->
+  <section class="card input-card">
+    <div class="input-split">
+
+      <div class="mic-section">
+        <h2 class="card-title">🎤 Voice Input</h2>
+        <div class="mic-wrapper">
+          <button id="micBtn" class="mic-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </button>
+          <p class="mic-hint" id="micHint">Click to start listening</p>
+          <div class="waveform" id="waveform">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="or-divider"><span>OR</span></div>
+
+      <div class="text-section">
+        <h2 class="card-title">⌨️ Type Text</h2>
+        <textarea id="inputText" placeholder="Type in any supported language…" rows="5"></textarea>
+        <button id="translateBtn" class="btn-primary">⚡ Translate</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Result ─────────────────────────────────────────────────── -->
+  <section class="card result-card">
+    <h2 class="card-title">📖 Translation Result</h2>
+    <div class="result-grid">
+      <div class="result-box src-box">
+        <div class="result-label" id="srcLabel">🇬🇧 Original</div>
+        <div class="result-text" id="originalText">—</div>
+      </div>
+      <div class="result-arrow">→</div>
+      <div class="result-box tgt-box">
+        <div class="result-label" id="tgtLabel">🇮🇳 Telugu Translation</div>
+        <div class="result-text" id="translatedText">—</div>
+        <button class="play-btn" id="playBtn" style="display:none">▶ Play Audio</button>
+      </div>
+    </div>
+    <div class="metrics-row">
+      <div class="metric"><span class="metric-label">⚡ Latency</span><span class="metric-value" id="metricLatency">—</span></div>
+      <div class="metric">
+        <span class="metric-label">🎯 Confidence</span>
+        <span class="metric-value" id="metricConf">—</span>
+        <div class="confidence-bar"><div class="confidence-fill" id="confFill"></div></div>
+      </div>
+      <div class="metric"><span class="metric-label">🔁 Direction</span><span class="metric-value" id="metricDir">—</span></div>
+      <div class="metric"><span class="metric-label">🔍 Source</span><span class="metric-value" id="metricSrc">—</span></div>
+    </div>
+  </section>
+
+  <!-- ── History ────────────────────────────────────────────────── -->
+  <section class="card history-card">
+    <div class="history-header">
+      <h2 class="card-title">📋 Translation History</h2>
+      <button id="clearBtn" class="btn-ghost">Clear</button>
+    </div>
+    <div id="historyList" class="history-list">
+      <div class="history-empty">No translations yet — start speaking or typing!</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>VoiceTranslate AI · Bidirectional · English ↔ Hindi ↔ Telugu ↔ Tamil ↔ Malayalam ↔ German ↔ French ↔ Spanish</p>
+</footer>
+
+<audio id="audioPlayer" hidden></audio>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "language": "hindi",
+  "test_samples": 200,
+  "baseline": {
+    "BLEU-1": 100.0,
+    "BLEU-2": 73.15,
+    "BLEU-3": 50.89,
+    "BLEU-4": 35.12,
+    "BLEU": 47.93,
+    "BP": 0.7971
+  },
+  "finetuned": {
+    "BLEU-1": 100.0,
+    "BLEU-2": 91.79,
+    "BLEU-3": 83.62,
+    "BLEU-4": 74.89,
+    "BLEU": 68.85,
+    "BP": 0.7907
+  },
+  "improvement": {
+    "BLEU-1": 0.0,
+    "BLEU-2": 18.64,
+    "BLEU-3": 32.73,
+    "BLEU-4": 39.77,
+    "BLEU": 20.92
+  }
+}

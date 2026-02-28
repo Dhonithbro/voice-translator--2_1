@@ -1,0 +1,27 @@
+{
+  "language": "spanish",
+  "test_samples": 200,
+  "baseline": {
+    "BLEU-1": 100.0,
+    "BLEU-2": 46.67,
+    "BLEU-3": 20.98,
+    "BLEU-4": 1.5,
+    "BLEU": 15.9,
+    "BP": 0.8119
+  },
+  "finetuned": {
+    "BLEU-1": 100.0,
+    "BLEU-2": 80.81,
+    "BLEU-3": 54.03,
+    "BLEU-4": 29.89,
+    "BLEU": 47.27,
+    "BP": 0.7864
+  },
+  "improvement": {
+    "BLEU-1": 0.0,
+    "BLEU-2": 34.14,
+    "BLEU-3": 33.05,
+    "BLEU-4": 28.39,
+    "BLEU": 31.37
+  }
+}

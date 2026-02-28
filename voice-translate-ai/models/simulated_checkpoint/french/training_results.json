@@ -1,0 +1,33 @@
+{
+  "model": "Helsinki-NLP/opus-mt-en-fr",
+  "language": "french",
+  "hyperparameters": {
+    "epochs": 3,
+    "batch_size": 8,
+    "learning_rate": 2e-05,
+    "max_length": 128,
+    "weight_decay": 0.01,
+    "warmup_steps": 50,
+    "train_ratio": 0.85
+  },
+  "training_history": {
+    "train_loss": [
+      0.4,
+      0.4387,
+      0.6327
+    ],
+    "val_loss": [
+      0.4812,
+      0.541,
+      0.7112
+    ],
+    "bleu": [
+      31.83,
+      35.1,
+      36.85
+    ]
+  },
+  "baseline_bleu": 28.3,
+  "final_bleu": 36.85,
+  "improvement": 8.55
+}

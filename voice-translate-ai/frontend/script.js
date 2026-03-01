@@ -105,6 +105,14 @@ const metricSrc    = document.getElementById("metricSrc");
 const historyList  = document.getElementById("historyList");
 const clearBtn     = document.getElementById("clearBtn");
 const audioPlayer  = document.getElementById("audioPlayer");
+const copyBtn      = document.getElementById("copyBtn");
+const detectBtn    = document.getElementById("detectBtn");
+const detectBadge  = document.getElementById("detectBadge");
+const detectText   = document.getElementById("detectText");
+const charCount    = document.getElementById("charCount");
+const btnSpinner   = document.getElementById("btnSpinner");
+const btnText      = document.querySelector(".btn-text");
+const themeBtn     = document.getElementById("themeBtn");
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
@@ -114,6 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSpeech();
   updateLabels();
   setStatus("loading");
+  setupTheme();
+  setupCharCount();
+  setupDetect();
 });
 
 // ── Language pills ────────────────────────────────────────────────────────────
@@ -203,7 +214,8 @@ inputText.addEventListener("keydown", e => { if (e.key==="Enter" && (e.ctrlKey||
 async function triggerTranslation(text) {
   if (!text) return;
   translateBtn.disabled = true;
-  translateBtn.textContent = "Translating…";
+  btnText.style.display = "none";
+  btnSpinner.style.display = "flex";
   try {
     if (ws && ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify({ text, src_lang: srcLang, tgt_lang: tgtLang }));
@@ -219,7 +231,8 @@ async function triggerTranslation(text) {
     demoTranslate(text);
   } finally {
     translateBtn.disabled = false;
-    translateBtn.textContent = "⚡ Translate";
+    btnText.style.display = "inline";
+    btnSpinner.style.display = "none";
   }
 }
 
@@ -283,6 +296,21 @@ function renderResult(original, data) {
   } else {
     playBtn.style.display = "none";
   }
+  // Show copy button when there's a translation
+  if (data.translated && !data.translated.startsWith("⚠")) {
+    copyBtn.style.display = "inline-flex";
+    copyBtn.classList.remove("copied");
+    copyBtn.textContent = "📋 Copy";
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(data.translated).then(() => {
+        copyBtn.textContent = "✅ Copied!";
+        copyBtn.classList.add("copied");
+        setTimeout(() => { copyBtn.textContent = "📋 Copy"; copyBtn.classList.remove("copied"); }, 2000);
+      });
+    };
+  } else {
+    copyBtn.style.display = "none";
+  }
 
   addHistory({ original: original || data.original, translated: data.translated,
                src: data.src_lang || srcLang, tgt: data.tgt_lang || tgtLang, latency });
@@ -342,6 +370,96 @@ function setupSpeech() {
 function stopRecording() {
   isRecording=false; micBtn.classList.remove("recording");
   waveform.classList.remove("active"); micHint.textContent="Click to start listening";
+}
+
+// ── Theme Toggle ─────────────────────────────────────────────────────────────
+function setupTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved === "light") { document.body.classList.add("light"); themeBtn.textContent = "☀️"; }
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("light");
+    const isLight = document.body.classList.contains("light");
+    themeBtn.textContent = isLight ? "☀️" : "🌙";
+    localStorage.setItem("theme", isLight ? "light" : "dark");
+  });
+}
+
+// ── Char Counter ──────────────────────────────────────────────────────────────
+function setupCharCount() {
+  inputText.addEventListener("input", () => {
+    const len = inputText.value.length;
+    charCount.textContent = `${len} / 500`;
+    charCount.style.color = len > 450 ? "#ef4444" : "var(--text-muted)";
+  });
+}
+
+// ── Auto Language Detection ───────────────────────────────────────────────────
+function setupDetect() {
+  detectBtn.addEventListener("click", async () => {
+    const text = inputText.value.trim();
+    if (!text) { alert("Please type something first!"); return; }
+    detectBtn.classList.add("detecting");
+    detectBtn.textContent = "🔍 Detecting…";
+    detectBadge.style.display = "block";
+    detectText.textContent = "Detecting language…";
+    try {
+      const res = await fetch(`${API_BASE}/detect`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const detected = data.language;
+        const meta = LANG_META[detected];
+        if (meta) {
+          // Auto-select the detected language
+          srcLangGroup.querySelectorAll(".lang-pill").forEach(b => {
+            b.classList.toggle("active", b.dataset.lang === detected);
+          });
+          srcLang = detected;
+          if (recognition) recognition.lang = getSpeechLang(srcLang);
+          updateLabels();
+          detectText.textContent = `✅ Detected: ${meta.flag} ${meta.label}`;
+        } else {
+          detectText.textContent = `✅ Detected: ${data.language_name || detected} (select manually)`;
+        }
+      } else {
+        throw new Error("detect failed");
+      }
+    } catch(e) {
+      // Fallback: simple client-side detection
+      const detected = clientDetect(text);
+      if (detected) {
+        srcLangGroup.querySelectorAll(".lang-pill").forEach(b => {
+          b.classList.toggle("active", b.dataset.lang === detected);
+        });
+        srcLang = detected;
+        updateLabels();
+        detectText.textContent = `✅ Detected: ${LANG_META[detected].flag} ${LANG_META[detected].label}`;
+      } else {
+        detectText.textContent = "⚠ Could not detect — please select manually";
+      }
+    } finally {
+      detectBtn.classList.remove("detecting");
+      detectBtn.textContent = "🔍 Auto Detect";
+    }
+  });
+}
+
+// Client-side language detection by Unicode script range
+function clientDetect(text) {
+  const counts = { telugu:0, hindi:0, tamil:0, malayalam:0 };
+  for (const ch of text) {
+    const cp = ch.codePointAt(0);
+    if (cp >= 0x0C00 && cp <= 0x0C7F) counts.telugu++;
+    else if (cp >= 0x0900 && cp <= 0x097F) counts.hindi++;
+    else if (cp >= 0x0B80 && cp <= 0x0BFF) counts.tamil++;
+    else if (cp >= 0x0D00 && cp <= 0x0D7F) counts.malayalam++;
+  }
+  const max = Math.max(...Object.values(counts));
+  if (max === 0) return "english";
+  return Object.keys(counts).find(k => counts[k] === max);
 }
 
 // ── Utils ─────────────────────────────────────────────────────────────────────

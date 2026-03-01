@@ -19,7 +19,6 @@
       </div>
     </div>
     <div class="header-right">
-      <!-- ① DARK/LIGHT TOGGLE -->
       <button class="theme-btn" id="themeBtn" title="Toggle theme">🌙</button>
       <div class="status-pill" id="statusPill">
         <span class="dot loading" id="statusDot"></span>
@@ -29,132 +28,321 @@
   </div>
 </header>
 
+<!-- ── TABS ── -->
+<nav class="tab-nav">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" data-tab="translator">🌐 Translator</button>
+    <button class="tab-btn" data-tab="document">📄 Document</button>
+    <button class="tab-btn" data-tab="conversation">🎙️ Conversation</button>
+    <button class="tab-btn" data-tab="bleu">📈 BLEU Scores</button>
+  </div>
+</nav>
+
 <main>
 
-  <!-- ── Language Selector ──────────────────────────────────────── -->
-  <section class="card lang-select-card">
-    <div class="lang-selector-row">
+  <!-- ══════════════════════════════════════════════════
+       TAB 1 — TRANSLATOR
+  ══════════════════════════════════════════════════ -->
+  <div class="tab-content active" id="tab-translator">
 
-     <label class="lang-col-label">🎤 Speak / Type In</label>
-        <!-- ③ DETECTED LANGUAGE BADGE -->
-        <div class="detect-badge" id="detectBadge" style="display:none">
-          <span id="detectText">Detecting…</span>
+    <section class="card lang-select-card">
+      <div class="lang-selector-row">
+        <div class="lang-col">
+          <label class="lang-col-label">🎤 Speak / Type In</label>
+          <div class="lang-pill-group" id="srcLangGroup">
+            <button class="lang-pill active" data-lang="english">🇬🇧 English</button>
+            <button class="lang-pill" data-lang="hindi">🇮🇳 Hindi</button>
+            <button class="lang-pill" data-lang="telugu">🇮🇳 Telugu</button>
+            <button class="lang-pill" data-lang="tamil">🇮🇳 Tamil</button>
+            <button class="lang-pill" data-lang="malayalam">🇮🇳 Malayalam</button>
+          </div>
         </div>
-        <div class="lang-pill-group" id="srcLangGroup">
-          <button class="lang-pill active" data-lang="english">🇬🇧 English</button>
-          <button class="lang-pill" data-lang="hindi">🇮🇳 Hindi</button>
-          <button class="lang-pill" data-lang="telugu">🇮🇳 Telugu</button>
-          <button class="lang-pill" data-lang="tamil">🇮🇳 Tamil</button>
-          <button class="lang-pill" data-lang="malayalam">🇮🇳 Malayalam</button>
-        </div>
-      </div>
-
-      <button class="swap-btn" id="swapBtn" title="Swap languages">⇄</button>
-
-      <div class="lang-col">
-        <label class="lang-col-label">📖 Translate To</label>
-        <div class="lang-pill-group" id="tgtLangGroup">
-          <button class="lang-pill" data-lang="english">🇬🇧 English</button>
-          <button class="lang-pill" data-lang="hindi">🇮🇳 Hindi</button>
-          <button class="lang-pill active" data-lang="telugu">🇮🇳 Telugu</button>
-          <button class="lang-pill" data-lang="tamil">🇮🇳 Tamil</button>
-          <button class="lang-pill" data-lang="malayalam">🇮🇳 Malayalam</button>
-          <button class="lang-pill" data-lang="german">🇩🇪 German</button>
-          <button class="lang-pill" data-lang="french">🇫🇷 French</button>
-          <button class="lang-pill" data-lang="spanish">🇪🇸 Spanish</button>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ── Input ──────────────────────────────────────────────────── -->
-  <section class="card input-card">
-    <div class="input-split">
-
-      <div class="mic-section">
-        <h2 class="card-title">🎤 Voice Input</h2>
-        <div class="mic-wrapper">
-          <button id="micBtn" class="mic-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="12" y1="19" x2="12" y2="23"/>
-              <line x1="8" y1="23" x2="16" y2="23"/>
-            </svg>
-          </button>
-          <p class="mic-hint" id="micHint">Click to start listening</p>
-          <div class="waveform" id="waveform">
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <button class="swap-btn" id="swapBtn" title="Swap languages">⇄</button>
+        <div class="lang-col">
+          <label class="lang-col-label">📖 Translate To</label>
+          <div class="lang-pill-group" id="tgtLangGroup">
+            <button class="lang-pill" data-lang="english">🇬🇧 English</button>
+            <button class="lang-pill" data-lang="hindi">🇮🇳 Hindi</button>
+            <button class="lang-pill active" data-lang="telugu">🇮🇳 Telugu</button>
+            <button class="lang-pill" data-lang="tamil">🇮🇳 Tamil</button>
+            <button class="lang-pill" data-lang="malayalam">🇮🇳 Malayalam</button>
+            <button class="lang-pill" data-lang="german">🇩🇪 German</button>
+            <button class="lang-pill" data-lang="french">🇫🇷 French</button>
+            <button class="lang-pill" data-lang="spanish">🇪🇸 Spanish</button>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="or-divider"><span>OR</span></div>
-
-      <div class="text-section">
-        <h2 class="card-title">⌨️ Type Text</h2>
-        <!-- ④ TEXTAREA WITH CHAR COUNTER -->
-        <div class="textarea-wrapper">
-          <textarea id="inputText" placeholder="Type in any supported language…" rows="5" maxlength="500"></textarea>
-          <span class="char-count" id="charCount">0 / 500</span>
+    <section class="card input-card">
+      <div class="input-split">
+        <div class="mic-section">
+          <h2 class="card-title">🎤 Voice Input</h2>
+          <div class="mic-wrapper">
+            <button id="micBtn" class="mic-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
+            <p class="mic-hint" id="micHint">Click to start listening</p>
+            <div class="waveform" id="waveform">
+              <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+          </div>
         </div>
-        <!-- ⑤ LOADING SPINNER ON BUTTON -->
-        <button id="translateBtn" class="btn-primary">
-          <span class="btn-text">⚡ Translate</span>
-          <span class="btn-spinner" id="btnSpinner" style="display:none">
-            <svg class="spinner-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="3" fill="none" stroke-dasharray="31.4" stroke-dashoffset="10"/></svg>
-            Translating…
-          </span>
-        </button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ── Result ─────────────────────────────────────────────────── -->
-  <section class="card result-card">
-    <h2 class="card-title">📖 Translation Result</h2>
-    <div class="result-grid">
-      <div class="result-box src-box">
-        <div class="result-label" id="srcLabel">🇬🇧 Original</div>
-        <div class="result-text" id="originalText">—</div>
-      </div>
-      <div class="result-arrow">→</div>
-      <div class="result-box tgt-box">
-        <div class="result-label" id="tgtLabel">🇮🇳 Telugu Translation</div>
-        <div class="result-text" id="translatedText">—</div>
-        <!-- ⑥ COPY + PLAY BUTTONS -->
-        <div class="result-actions">
-          <button class="copy-btn" id="copyBtn" style="display:none">📋 Copy</button>
-          <button class="play-btn" id="playBtn" style="display:none">▶ Play Audio</button>
+        <div class="or-divider"><span>OR</span></div>
+        <div class="text-section">
+          <h2 class="card-title">⌨️ Type Text</h2>
+          <div class="textarea-wrapper">
+            <textarea id="inputText" placeholder="Type in any supported language…" rows="5" maxlength="500"></textarea>
+            <span class="char-count" id="charCount">0 / 500</span>
+          </div>
+          <button id="translateBtn" class="btn-primary">
+            <span class="btn-text">⚡ Translate</span>
+            <span class="btn-spinner" id="btnSpinner" style="display:none">
+              <svg class="spinner-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="3" fill="none" stroke-dasharray="31.4" stroke-dashoffset="10"/></svg>
+              Translating…
+            </span>
+          </button>
         </div>
       </div>
-    </div>
-    <div class="metrics-row">
-      <div class="metric"><span class="metric-label">⚡ Latency</span><span class="metric-value" id="metricLatency">—</span></div>
-      <div class="metric">
-        <span class="metric-label">🎯 Confidence</span>
-        <span class="metric-value" id="metricConf">—</span>
-        <div class="confidence-bar"><div class="confidence-fill" id="confFill"></div></div>
-      </div>
-      <div class="metric"><span class="metric-label">🔁 Direction</span><span class="metric-value" id="metricDir">—</span></div>
-      <div class="metric"><span class="metric-label">🔍 Source</span><span class="metric-value" id="metricSrc">—</span></div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ── History ────────────────────────────────────────────────── -->
-  <section class="card history-card">
-    <div class="history-header">
-      <h2 class="card-title">📋 Translation History</h2>
-      <button id="clearBtn" class="btn-ghost">Clear</button>
-    </div>
-    <div id="historyList" class="history-list">
-      <div class="history-empty">No translations yet — start speaking or typing!</div>
-    </div>
-  </section>
+    <section class="card result-card">
+      <h2 class="card-title">📖 Translation Result</h2>
+      <div class="result-grid">
+        <div class="result-box src-box">
+          <div class="result-label" id="srcLabel">🇬🇧 Original</div>
+          <div class="result-text" id="originalText">—</div>
+        </div>
+        <div class="result-arrow">→</div>
+        <div class="result-box tgt-box">
+          <div class="result-label" id="tgtLabel">🇮🇳 Telugu Translation</div>
+          <div class="result-text" id="translatedText">—</div>
+          <div class="result-actions">
+            <button class="copy-btn" id="copyBtn" style="display:none">📋 Copy</button>
+            <button class="play-btn" id="playBtn" style="display:none">▶ Play</button>
+          </div>
+          <!-- ⑥ VOICE SPEED CONTROL -->
+          <div class="speed-control" id="speedControl" style="display:none">
+            <label class="speed-label">🔊 Speed: <span id="speedVal">1.0x</span></label>
+            <input type="range" id="speedSlider" min="0.5" max="2" step="0.1" value="1.0" class="speed-slider"/>
+          </div>
+        </div>
+      </div>
+      <div class="metrics-row">
+        <div class="metric"><span class="metric-label">⚡ Latency</span><span class="metric-value" id="metricLatency">—</span></div>
+        <div class="metric">
+          <span class="metric-label">🎯 Confidence</span>
+          <span class="metric-value" id="metricConf">—</span>
+          <div class="confidence-bar"><div class="confidence-fill" id="confFill"></div></div>
+        </div>
+        <div class="metric"><span class="metric-label">🔁 Direction</span><span class="metric-value" id="metricDir">—</span></div>
+        <div class="metric"><span class="metric-label">🔍 Source</span><span class="metric-value" id="metricSrc">—</span></div>
+      </div>
+    </section>
+
+    <section class="card history-card">
+      <div class="history-header">
+        <h2 class="card-title">📋 Translation History</h2>
+        <button id="clearBtn" class="btn-ghost">Clear</button>
+      </div>
+      <div id="historyList" class="history-list">
+        <div class="history-empty">No translations yet — start speaking or typing!</div>
+      </div>
+    </section>
+
+  </div><!-- end tab-translator -->
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 2 — DOCUMENT TRANSLATION
+  ══════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-document">
+    <section class="card">
+      <h2 class="card-title">📄 Document Translation</h2>
+      <p class="section-desc">Upload a .txt file and translate the entire document to any language.</p>
+
+      <div class="doc-lang-row">
+        <div>
+          <label class="lang-col-label">From</label>
+          <select id="docSrcLang" class="lang-select">
+            <option value="english">🇬🇧 English</option>
+            <option value="hindi">🇮🇳 Hindi</option>
+            <option value="telugu">🇮🇳 Telugu</option>
+            <option value="tamil">🇮🇳 Tamil</option>
+            <option value="malayalam">🇮🇳 Malayalam</option>
+          </select>
+        </div>
+        <div class="doc-arrow">→</div>
+        <div>
+          <label class="lang-col-label">To</label>
+          <select id="docTgtLang" class="lang-select">
+            <option value="english">🇬🇧 English</option>
+            <option value="hindi">🇮🇳 Hindi</option>
+            <option value="telugu" selected>🇮🇳 Telugu</option>
+            <option value="tamil">🇮🇳 Tamil</option>
+            <option value="malayalam">🇮🇳 Malayalam</option>
+            <option value="german">🇩🇪 German</option>
+            <option value="french">🇫🇷 French</option>
+            <option value="spanish">🇪🇸 Spanish</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="upload-zone" id="uploadZone">
+        <div class="upload-icon">📂</div>
+        <p class="upload-text">Click to upload or drag & drop a <strong>.txt</strong> file</p>
+        <input type="file" id="docFile" accept=".txt" hidden/>
+      </div>
+
+      <div id="docPreview" class="doc-preview" style="display:none">
+        <div class="doc-preview-header">
+          <span id="docFileName">—</span>
+          <span id="docWordCount" class="doc-wc">—</span>
+        </div>
+        <div id="docOriginalText" class="doc-text"></div>
+      </div>
+
+      <button id="docTranslateBtn" class="btn-primary" style="display:none">⚡ Translate Document</button>
+
+      <div id="docProgress" class="doc-progress" style="display:none">
+        <div class="doc-progress-bar"><div class="doc-progress-fill" id="docProgressFill"></div></div>
+        <span id="docProgressText">Translating paragraph 0 of 0…</span>
+      </div>
+
+      <div id="docResult" class="doc-result" style="display:none">
+        <div class="doc-result-header">
+          <h3 class="doc-result-title">✅ Translated Document</h3>
+          <button id="docDownloadBtn" class="btn-ghost">⬇ Download .txt</button>
+        </div>
+        <div id="docTranslatedText" class="doc-text doc-translated"></div>
+      </div>
+    </section>
+  </div><!-- end tab-document -->
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 3 — CONVERSATION MODE
+  ══════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-conversation">
+    <section class="card">
+      <h2 class="card-title">🎙️ Conversation Mode</h2>
+      <p class="section-desc">Two people speaking different languages — translated in real time like a live interpreter.</p>
+
+      <div class="conv-setup">
+        <div class="conv-person">
+          <div class="conv-avatar conv-avatar-a">A</div>
+          <label class="lang-col-label">Person A speaks</label>
+          <select id="convLangA" class="lang-select">
+            <option value="english" selected>🇬🇧 English</option>
+            <option value="hindi">🇮🇳 Hindi</option>
+            <option value="telugu">🇮🇳 Telugu</option>
+            <option value="tamil">🇮🇳 Tamil</option>
+            <option value="malayalam">🇮🇳 Malayalam</option>
+            <option value="german">🇩🇪 German</option>
+            <option value="french">🇫🇷 French</option>
+            <option value="spanish">🇪🇸 Spanish</option>
+          </select>
+        </div>
+        <div class="conv-vs">⇄</div>
+        <div class="conv-person">
+          <div class="conv-avatar conv-avatar-b">B</div>
+          <label class="lang-col-label">Person B speaks</label>
+          <select id="convLangB" class="lang-select">
+            <option value="english">🇬🇧 English</option>
+            <option value="hindi">🇮🇳 Hindi</option>
+            <option value="telugu" selected>🇮🇳 Telugu</option>
+            <option value="tamil">🇮🇳 Tamil</option>
+            <option value="malayalam">🇮🇳 Malayalam</option>
+            <option value="german">🇩🇪 German</option>
+            <option value="french">🇫🇷 French</option>
+            <option value="spanish">🇪🇸 Spanish</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="conv-chat" id="convChat">
+        <div class="conv-empty">Start a conversation by typing below ↓</div>
+      </div>
+
+      <div class="conv-inputs">
+        <div class="conv-input-row conv-input-a">
+          <div class="conv-avatar conv-avatar-a">A</div>
+          <input type="text" id="convInputA" class="conv-input" placeholder="Person A types here…"/>
+          <button class="conv-send-btn conv-btn-a" id="convSendA">Send →</button>
+        </div>
+        <div class="conv-input-row conv-input-b">
+          <div class="conv-avatar conv-avatar-b">B</div>
+          <input type="text" id="convInputB" class="conv-input" placeholder="Person B types here…"/>
+          <button class="conv-send-btn conv-btn-b" id="convSendB">← Send</button>
+        </div>
+      </div>
+
+      <div class="conv-footer">
+        <button id="convClearBtn" class="btn-ghost">🗑 Clear Chat</button>
+      </div>
+    </section>
+  </div><!-- end tab-conversation -->
+
+  <!-- ══════════════════════════════════════════════════
+       TAB 4 — BLEU SCORE VISUALIZER
+  ══════════════════════════════════════════════════ -->
+  <div class="tab-content" id="tab-bleu">
+    <section class="card">
+      <h2 class="card-title">📈 BLEU Score Visualizer</h2>
+      <p class="section-desc">Fine-tuning results — comparing baseline vs fine-tuned MarianMT model across 4 languages.</p>
+
+      <div class="bleu-summary-row">
+        <div class="bleu-summary-card">
+          <div class="bleu-summary-val">26.47</div>
+          <div class="bleu-summary-label">Avg Baseline BLEU</div>
+        </div>
+        <div class="bleu-summary-arrow">→</div>
+        <div class="bleu-summary-card bleu-summary-card--good">
+          <div class="bleu-summary-val">49.94</div>
+          <div class="bleu-summary-label">Avg Fine-Tuned BLEU</div>
+        </div>
+        <div class="bleu-summary-card bleu-summary-card--accent">
+          <div class="bleu-summary-val">+23.47</div>
+          <div class="bleu-summary-label">Average Improvement</div>
+        </div>
+      </div>
+
+      <h3 class="bleu-section-title">BLEU Score Comparison by Language</h3>
+      <div class="bleu-chart" id="bleuChart">
+        <!-- rendered by JS -->
+      </div>
+
+      <h3 class="bleu-section-title">Training Loss Curve (French — 3 Epochs)</h3>
+      <div class="loss-chart" id="lossChart">
+        <!-- rendered by JS -->
+      </div>
+
+      <h3 class="bleu-section-title">Dataset Statistics</h3>
+      <div class="dataset-stats">
+        <div class="stat-card"><div class="stat-val">1,500</div><div class="stat-label">Total Pairs</div></div>
+        <div class="stat-card"><div class="stat-val">7</div><div class="stat-label">Language Pairs</div></div>
+        <div class="stat-card"><div class="stat-val">6</div><div class="stat-label">Domains</div></div>
+        <div class="stat-card"><div class="stat-val">3</div><div class="stat-label">Epochs</div></div>
+        <div class="stat-card"><div class="stat-val">2e-5</div><div class="stat-label">Learning Rate</div></div>
+        <div class="stat-card"><div class="stat-val">8</div><div class="stat-label">Batch Size</div></div>
+      </div>
+
+      <h3 class="bleu-section-title">Domain Distribution</h3>
+      <div class="domain-bars">
+        <div class="domain-bar-row"><span class="domain-name">Daily Conversation</span><div class="domain-bar" style="width:28%"><span>28%</span></div></div>
+        <div class="domain-bar-row"><span class="domain-name">Medical</span><div class="domain-bar" style="width:18%"><span>18%</span></div></div>
+        <div class="domain-bar-row"><span class="domain-name">Travel</span><div class="domain-bar" style="width:18%"><span>18%</span></div></div>
+        <div class="domain-bar-row"><span class="domain-name">Business</span><div class="domain-bar" style="width:15%"><span>15%</span></div></div>
+        <div class="domain-bar-row"><span class="domain-name">Education</span><div class="domain-bar" style="width:12%"><span>12%</span></div></div>
+        <div class="domain-bar-row"><span class="domain-name">Technical</span><div class="domain-bar" style="width:9%"><span>9%</span></div></div>
+      </div>
+    </section>
+  </div><!-- end tab-bleu -->
 
 </main>
 

@@ -4,8 +4,8 @@
  * Target : English | Hindi | Telugu | Tamil | Malayalam | German | French | Spanish
  */
 
-const API_BASE = "https://voice-translator--2_1.up.railway.app";
-const WS_URL = "wss://voice-translator--2_1.railway.app/ws/translate";
+const API_BASE = "https://voice-translator-21-production.up.railway.app";
+const WS_URL   = "wss://voice-translator-21-production.up.railway.app/ws/translate";
 
 let srcLang = "english";
 let tgtLang = "telugu";

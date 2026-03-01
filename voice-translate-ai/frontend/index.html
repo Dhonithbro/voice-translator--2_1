@@ -18,9 +18,13 @@
         <span class="brand-sub">Bidirectional Neural Translation · Final Year AI Project</span>
       </div>
     </div>
-    <div class="status-pill" id="statusPill">
-      <span class="dot loading" id="statusDot"></span>
-      <span id="statusText">Connecting…</span>
+    <div class="header-right">
+      <!-- ① DARK/LIGHT TOGGLE -->
+      <button class="theme-btn" id="themeBtn" title="Toggle theme">🌙</button>
+      <div class="status-pill" id="statusPill">
+        <span class="dot loading" id="statusDot"></span>
+        <span id="statusText">Connecting…</span>
+      </div>
     </div>
   </div>
 </header>
@@ -31,9 +35,16 @@
   <section class="card lang-select-card">
     <div class="lang-selector-row">
 
-      <!-- Source Language -->
       <div class="lang-col">
-        <label class="lang-col-label">🎤 Speak / Type In</label>
+        <div class="lang-col-header">
+          <label class="lang-col-label">🎤 Speak / Type In</label>
+          <!-- ② AUTO-DETECT BUTTON -->
+          <button class="detect-btn" id="detectBtn" title="Auto-detect language">🔍 Auto Detect</button>
+        </div>
+        <!-- ③ DETECTED LANGUAGE BADGE -->
+        <div class="detect-badge" id="detectBadge" style="display:none">
+          <span id="detectText">Detecting…</span>
+        </div>
         <div class="lang-pill-group" id="srcLangGroup">
           <button class="lang-pill active" data-lang="english">🇬🇧 English</button>
           <button class="lang-pill" data-lang="hindi">🇮🇳 Hindi</button>
@@ -43,10 +54,8 @@
         </div>
       </div>
 
-      <!-- Swap button -->
       <button class="swap-btn" id="swapBtn" title="Swap languages">⇄</button>
 
-      <!-- Target Language -->
       <div class="lang-col">
         <label class="lang-col-label">📖 Translate To</label>
         <div class="lang-pill-group" id="tgtLangGroup">
@@ -92,8 +101,19 @@
 
       <div class="text-section">
         <h2 class="card-title">⌨️ Type Text</h2>
-        <textarea id="inputText" placeholder="Type in any supported language…" rows="5"></textarea>
-        <button id="translateBtn" class="btn-primary">⚡ Translate</button>
+        <!-- ④ TEXTAREA WITH CHAR COUNTER -->
+        <div class="textarea-wrapper">
+          <textarea id="inputText" placeholder="Type in any supported language…" rows="5" maxlength="500"></textarea>
+          <span class="char-count" id="charCount">0 / 500</span>
+        </div>
+        <!-- ⑤ LOADING SPINNER ON BUTTON -->
+        <button id="translateBtn" class="btn-primary">
+          <span class="btn-text">⚡ Translate</span>
+          <span class="btn-spinner" id="btnSpinner" style="display:none">
+            <svg class="spinner-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="3" fill="none" stroke-dasharray="31.4" stroke-dashoffset="10"/></svg>
+            Translating…
+          </span>
+        </button>
       </div>
 
     </div>
@@ -111,7 +131,11 @@
       <div class="result-box tgt-box">
         <div class="result-label" id="tgtLabel">🇮🇳 Telugu Translation</div>
         <div class="result-text" id="translatedText">—</div>
-        <button class="play-btn" id="playBtn" style="display:none">▶ Play Audio</button>
+        <!-- ⑥ COPY + PLAY BUTTONS -->
+        <div class="result-actions">
+          <button class="copy-btn" id="copyBtn" style="display:none">📋 Copy</button>
+          <button class="play-btn" id="playBtn" style="display:none">▶ Play Audio</button>
+        </div>
       </div>
     </div>
     <div class="metrics-row">

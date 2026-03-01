@@ -4,7 +4,7 @@
  * Target : English | Hindi | Telugu | Tamil | Malayalam | German | French | Spanish
  */
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://voice-translator--2_1.up.railway.app";
 const WS_URL = "wss://voice-translator--2_1.railway.app/ws/translate";
 
 let srcLang = "english";

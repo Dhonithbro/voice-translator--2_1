@@ -106,9 +106,6 @@ const historyList  = document.getElementById("historyList");
 const clearBtn     = document.getElementById("clearBtn");
 const audioPlayer  = document.getElementById("audioPlayer");
 const copyBtn      = document.getElementById("copyBtn");
-const detectBtn    = document.getElementById("detectBtn");
-const detectBadge  = document.getElementById("detectBadge");
-const detectText   = document.getElementById("detectText");
 const charCount    = document.getElementById("charCount");
 const btnSpinner   = document.getElementById("btnSpinner");
 const btnText      = document.querySelector(".btn-text");
@@ -124,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setStatus("loading");
   setupTheme();
   setupCharCount();
-  setupDetect();
 });
 
 // ── Language pills ────────────────────────────────────────────────────────────
@@ -391,75 +387,6 @@ function setupCharCount() {
     charCount.textContent = `${len} / 500`;
     charCount.style.color = len > 450 ? "#ef4444" : "var(--text-muted)";
   });
-}
-
-// ── Auto Language Detection ───────────────────────────────────────────────────
-function setupDetect() {
-  detectBtn.addEventListener("click", async () => {
-    const text = inputText.value.trim();
-    if (!text) { alert("Please type something first!"); return; }
-    detectBtn.classList.add("detecting");
-    detectBtn.textContent = "🔍 Detecting…";
-    detectBadge.style.display = "block";
-    detectText.textContent = "Detecting language…";
-    try {
-      const res = await fetch(`${API_BASE}/detect`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const detected = data.language;
-        const meta = LANG_META[detected];
-        if (meta) {
-          // Auto-select the detected language
-          srcLangGroup.querySelectorAll(".lang-pill").forEach(b => {
-            b.classList.toggle("active", b.dataset.lang === detected);
-          });
-          srcLang = detected;
-          if (recognition) recognition.lang = getSpeechLang(srcLang);
-          updateLabels();
-          detectText.textContent = `✅ Detected: ${meta.flag} ${meta.label}`;
-        } else {
-          detectText.textContent = `✅ Detected: ${data.language_name || detected} (select manually)`;
-        }
-      } else {
-        throw new Error("detect failed");
-      }
-    } catch(e) {
-      // Fallback: simple client-side detection
-      const detected = clientDetect(text);
-      if (detected) {
-        srcLangGroup.querySelectorAll(".lang-pill").forEach(b => {
-          b.classList.toggle("active", b.dataset.lang === detected);
-        });
-        srcLang = detected;
-        updateLabels();
-        detectText.textContent = `✅ Detected: ${LANG_META[detected].flag} ${LANG_META[detected].label}`;
-      } else {
-        detectText.textContent = "⚠ Could not detect — please select manually";
-      }
-    } finally {
-      detectBtn.classList.remove("detecting");
-      detectBtn.textContent = "🔍 Auto Detect";
-    }
-  });
-}
-
-// Client-side language detection by Unicode script range
-function clientDetect(text) {
-  const counts = { telugu:0, hindi:0, tamil:0, malayalam:0 };
-  for (const ch of text) {
-    const cp = ch.codePointAt(0);
-    if (cp >= 0x0C00 && cp <= 0x0C7F) counts.telugu++;
-    else if (cp >= 0x0900 && cp <= 0x097F) counts.hindi++;
-    else if (cp >= 0x0B80 && cp <= 0x0BFF) counts.tamil++;
-    else if (cp >= 0x0D00 && cp <= 0x0D7F) counts.malayalam++;
-  }
-  const max = Math.max(...Object.values(counts));
-  if (max === 0) return "english";
-  return Object.keys(counts).find(k => counts[k] === max);
 }
 
 // ── Utils ─────────────────────────────────────────────────────────────────────

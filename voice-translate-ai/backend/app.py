@@ -34,6 +34,9 @@ class TranslateRequest(BaseModel):
     tgt_lang: str = "telugu"
     tts:      bool = True
 
+class DetectRequest(BaseModel):
+    text: str
+
 class AudioRequest(BaseModel):
     audio_b64:   str
     src_lang:    str = "english"
@@ -43,6 +46,34 @@ class AudioRequest(BaseModel):
 @app.get("/health")
 async def health():
     return {"status": "ok", "timestamp": time.time()}
+
+@app.post("/detect")
+async def detect_language(req: DetectRequest):
+    text = req.text.strip()
+    if not text:
+        raise HTTPException(400, "text is empty")
+    try:
+        from deep_translator import GoogleTranslator
+        # Use translate to detect: translate to English and get source
+        from deep_translator.exceptions import LanguageNotSupportedException
+        import unicodedata
+        # Script-based detection first (fast, offline)
+        counts = {"telugu":0,"hindi":0,"tamil":0,"malayalam":0}
+        for ch in text:
+            cp = ord(ch)
+            if 0x0C00 <= cp <= 0x0C7F: counts["telugu"] += 1
+            elif 0x0900 <= cp <= 0x097F: counts["hindi"] += 1
+            elif 0x0B80 <= cp <= 0x0BFF: counts["tamil"] += 1
+            elif 0x0D00 <= cp <= 0x0D7F: counts["malayalam"] += 1
+        mx = max(counts.values())
+        if mx > 0:
+            lang = max(counts, key=counts.get)
+            labels = {"telugu":"Telugu","hindi":"Hindi","tamil":"Tamil","malayalam":"Malayalam"}
+            return {"language": lang, "language_name": labels[lang], "confidence": 0.99}
+        # Default to English for Latin script
+        return {"language": "english", "language_name": "English", "confidence": 0.90}
+    except Exception as e:
+        return {"language": "english", "language_name": "English", "confidence": 0.5}
 
 @app.get("/languages")
 async def get_languages():

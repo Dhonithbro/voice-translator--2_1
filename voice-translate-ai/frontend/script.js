@@ -4,7 +4,7 @@
  */
 
 const API_BASE = "https://voice-translator-2-1-4.onrender.com";
-const WS_URL   = "wss://voice-translator-2-1-4.onrender.com/ws/translate";
+const WS_URL = "wss://voice-translator-2-1-4.onrender.com/ws/translate";
 
 let srcLang = "english";
 let tgtLang = "telugu";
